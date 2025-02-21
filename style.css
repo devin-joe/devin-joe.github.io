@@ -53,3 +53,7 @@ canvas {
     margin: 30px auto;
     display: block;
 }
+.game h2 {
+    margin: 30px auto -20px auto;
+    color: #094187;
+}
