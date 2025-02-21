@@ -44,6 +44,13 @@
         h1, h2 {
             text-align: center;
         }
+        .container {
+            display: flex;
+            border: 1px black;
+        }
+        .container * {
+            margin: 10px;
+        }
         footer {
             background: #052144;
             color: white;
@@ -61,9 +68,9 @@
 </header>
 
 <nav>
+    <a href="#">Home</a>
     <a href="#about">About Me</a>
-    <a href="#something">Something Else</a>
-    <a href="beans-game.html">Beans Game (work in progress)</a>
+    <a href="#projects">Goofy Projects</a>
 </nav>
 
 <section id="about">
@@ -71,14 +78,11 @@
     <p>Hello! I’m Devin Joe. I do not reference this website anywhere publicly, so probably either I sent it to you or you found it yourself. I guess it is visible somewhere on GitHub.</p>
 </section>
 
-<section id="something">
-    <h2>Something Else</h2>
-    <ul>
-        <li>Oh look ChatGPT made me a nice list of achievements</li>
-        <li>Captain of the varsity soccer team</li>
-        <li>Yeah that last one is totally false</li>
-        <li>Some fourth thing</li>
-    </ul>
+<section id="projects">
+    <h2>Goofy Projects</h2>
+    <div class="container">
+        <a href="beans-game.html">Beans Game</a>
+    </div>
 </section>
 
 <section id="jokes">
