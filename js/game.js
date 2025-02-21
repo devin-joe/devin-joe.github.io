@@ -119,19 +119,19 @@ class Actor {
         this.xv *= 0.9
         if (this.x < 0) {
             this.x = 0;
-            this.xv = 0;
+            this.xv *= -1;
         }
         if (this.y < 0) {
             this.y = 0;
-            this.yv = 0;
+            this.yv *= -1;
         }
         if (this.x > this.world.area.canvas.width - this.image.width) {
             this.x = this.world.area.canvas.width - this.image.width;
-            this.xv = 0;
+            this.xv *= -1;
         }
         if (this.y > this.world.area.canvas.height - this.image.height) {
             this.y = this.world.area.canvas.height - this.image.height;
-            this.yv = 0;
+            this.yv *= -1;
         }
         /**
          * The code above is for testing purposes lol delete it.
