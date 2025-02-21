@@ -14,8 +14,8 @@ class Area {
         this.canvas.width = width;
         this.canvas.height = height;
         this.context = this.canvas.getContext("2d");
-        let div = document.getElementById("game");
-        div.insertBefore(this.canvas, div.childNodes[0])
+        document.getElementById("game").appendChild(this.canvas);
+        // div.insertBefore(this.canvas, div.childNodes[0])
         // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
     }
