@@ -7,7 +7,7 @@ function isKeyDown(key) {
 }
 
 class Area {
-    constructor(width = 1280, height = 720) {
+    constructor(width = 800, height = 450) {
         this.worldList = [];
         this.focusedWorld = null;
         this.canvas = document.createElement("canvas");

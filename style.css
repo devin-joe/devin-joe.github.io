@@ -3,8 +3,11 @@
     font-family: Arial, sans-serif;
 }
 body {
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
     background-color: #eef6ff;
 }
 header, footer {
@@ -56,4 +59,10 @@ canvas {
 .game h2 {
     margin: 30px auto -20px auto;
     color: #094187;
+}
+.content {
+    flex: 1 0 auto;
+}
+footer {
+    flex-shrink: 0;
 }
