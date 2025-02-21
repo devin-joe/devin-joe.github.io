@@ -1,5 +1,5 @@
 * {
-    /* outline: 1px solid #000000; */
+    outline: 1px solid #000000;
     font-family: Arial, sans-serif;
 }
 body {
@@ -65,4 +65,19 @@ canvas {
 }
 footer {
     flex-shrink: 0;
+}
+.image-row {
+    display: flex;
+    justify-content: left;
+    align-items: baseline;
+}
+.project-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+.project-row > a {
+    flex: 0 0 auto;
+    width: 200px;
 }
