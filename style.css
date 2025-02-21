@@ -1,5 +1,5 @@
 * {
-    outline: 1px solid #000000;
+    /* outline: 1px solid #000000; */
     font-family: Arial, sans-serif;
 }
 body {
@@ -40,7 +40,7 @@ section {
     padding: 20px;
     width: 800px;
     background-color: #ffffff;
-    border-radius: 10px;
+    border-radius: 40px;
     box-shadow: 0 0 10px #00000020;
 }
 section h1, section h2 {
@@ -73,11 +73,31 @@ footer {
 }
 .project-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
     align-items: baseline;
+    gap: 25px;
     flex-wrap: wrap;
 }
-.project-row > a {
-    flex: 0 0 auto;
-    width: 200px;
+.project {
+    flex: 1 0 auto;
+    min-width: 200px;
+    max-width: 400px;
+    height: 150px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px;
+    box-shadow: 0 0 20px #00000020;
+    background-image: url("images/map2.jpg");
+
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #ffffff;
+}
+.project > * {
+    margin: 5px;
 }
