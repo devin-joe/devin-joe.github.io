@@ -13,32 +13,35 @@ body {
 header, footer {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     background-color: #094187;
+    padding: 20px;
 }
 header *, footer * {
     color: #ffffff;
 }
-header > *, footer > * {
-    margin: 20px 40px;
+header > h1, footer > p {
+    margin: 0px 20px;
 }
 h1, h2 {
     text-align: center;
 }
 nav {
     display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 0px 20px;
 }
 nav a {
     font-weight: bold;
     text-decoration: none;
-}
-nav > * {
     margin: auto 30px;
     font-size: large;
 }
 section {
     margin: 30px auto;
     padding: 20px;
-    width: 800px;
+    max-width: 800px;
     background-color: #ffffff;
     border-radius: 40px;
     box-shadow: 0 0 10px #00000020;
