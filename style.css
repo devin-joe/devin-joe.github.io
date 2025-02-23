@@ -34,11 +34,11 @@ nav {
     justify-content: space-between;
     flex-wrap: wrap;
     margin: 0px 20px;
+    gap: 0px 30px;
 }
 nav a {
     font-weight: bold;
     text-decoration: none;
-    margin: auto 30px;
     font-size: large;
 }
 section {
