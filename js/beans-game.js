@@ -2,7 +2,7 @@ var testGameArea = new GameArea();
 var testWorld = new World();
 var testActor = new Actor();
 testWorld.addActor(testActor);
-testArea.addWorld(testWorld);
+testGameArea.addWorld(testWorld);
 
 function act() {
     testGameArea.act();
