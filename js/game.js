@@ -6,7 +6,7 @@ function isKeyDown(key) {
     return keysDown[key];
 }
 
-class Area {
+class GameArea {
     constructor(width = 800, height = 450) {
         this.worldList = [];
         this.focusedWorld = null;
