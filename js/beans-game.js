@@ -1,6 +1,6 @@
-var testGameArea = new GameArea();
-var testWorld = new World();
-var testActor = new Actor();
+const testGameArea = new GameArea();
+const testWorld = new World();
+const testActor = new Actor();
 testWorld.addActor(testActor);
 testGameArea.addWorld(testWorld);
 

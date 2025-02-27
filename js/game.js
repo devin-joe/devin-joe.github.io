@@ -1,6 +1,10 @@
-var keysDown = {};
-window.onkeyup = function(e) { keysDown[e.key] = false; }
-window.onkeydown = function(e) { keysDown[e.key] = true; }
+let keysDown = {};
+window.onkeyup = function (e) {
+    keysDown[e.key] = false;
+};
+window.onkeydown = function (e) {
+    keysDown[e.key] = true;
+};
 
 function isKeyDown(key) {
     return keysDown[key];
@@ -19,6 +23,7 @@ class GameArea {
         // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
     }
+
     addWorld(world, focused = true) {
         this.worldList.push(world);
         if (focused) {
@@ -50,7 +55,7 @@ class GameArea {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let i = 0; i < this.worldList.length; i++) {
             let world = this.worldList[i];
-            if (world.isActive) {
+            if (world.isActive && world.isShown) {
                 this.worldList[i].act();
             }
         }
@@ -61,6 +66,7 @@ class GameArea {
 class World {
     constructor() {
         this.isActive = true;
+        this.isShown = true;
         this.actorList = [];
         this.area = null;
     }
@@ -73,7 +79,7 @@ class World {
         actor.world = null;
     }
     render() {
-        var ctx = this.area.context;
+        let ctx = this.area.context;
         for (let i = 0; i < this.actorList.length; i++) {
             let actor = this.actorList[i];
             ctx.drawImage(actor.image, actor.x, actor.y);
@@ -81,7 +87,7 @@ class World {
     }
     act() {
         for (let i = 0; i < this.actorList.length; i++) {
-            this.actorList[i].act()
+            this.actorList[i].act();
         }
     }
 }
@@ -93,30 +99,29 @@ class Actor {
         this.xv = 0;
         this.yv = 0;
         this.image = new Image();
-        this.image.src = imageSrc
+        this.image.src = imageSrc;
         this.world = null;
     }
     act() {
-
         /**
          * The code below is for testing purposes lol delete it.
          */
-        if (isKeyDown("w")) {
+        if (isKeyDown("w") || isKeyDown("ArrowUp")) {
             this.yv -= 1;
         }
-        if (isKeyDown("a")) {
+        if (isKeyDown("a") || isKeyDown("ArrowLeft")) {
             this.xv -= 1;
         }
-        if (isKeyDown("s")) {
+        if (isKeyDown("s") || isKeyDown("ArrowDown")) {
             this.yv += 1;
         }
-        if (isKeyDown("d")) {
+        if (isKeyDown("d") || isKeyDown("ArrowRight")) {
             this.xv += 1;
         }
         this.x += this.xv;
         this.y += this.yv;
-        this.yv *= 0.9
-        this.xv *= 0.9
+        this.yv *= 0.9;
+        this.xv *= 0.9;
         if (this.x < 0) {
             this.x = 0;
             this.xv *= -1;
