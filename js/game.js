@@ -10,10 +10,9 @@ function isKeyDown(key) {
     return keysDown[key];
 }
 
-class GameArea {
+class Game {
     constructor(width = 800, height = 450) {
         this.worldList = [];
-        this.focusedWorld = null;
         this.canvas = document.createElement("canvas");
         this.canvas.width = width;
         this.canvas.height = height;
@@ -23,43 +22,44 @@ class GameArea {
         // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
     }
-
-    addWorld(world, focused = true) {
+    addWorld(world) {
         this.worldList.push(world);
-        if (focused) {
-            this.focusedWorld = world;
-        }
-        world.area = this;
+        world.game = this;
     }
     removeWorld(world) {
         this.worldList.pop(world);
-        // Focus the most recently added world.
-        if (world == this.focusedWorld) {
-            if (this.worldList.length > 0) {
-                this.focusedWorld = this.worldList.at(-1);
-            } else {
-                this.focusedWorld = null;
-            }
-        }
-        world.area = null;
+        world.game = null;
         /**
          * It should be noted that removing the worlds without properly
          * deactiving or deleting them or something might amass garbage
          * or something. TODO?
          */
     }
-    render() {
-        this.focusedWorld.render();
+    renderWorld(world) {
+        let ctx = this.context;
+        ctx.drawImage(world.backgroundImage, 0, 0);
+        for (let i = 0; i < world.actorList.length; i++) {
+            let actor = world.actorList[i];
+            if (actor.isShown) {
+                this.renderActor(actor);
+            }
+        }
+    }
+    renderActor(actor, x, y) {
+        let ctx = this.context;
+        ctx.drawImage(actor.image, actor.gameX, actor.gameY);
     }
     act() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let i = 0; i < this.worldList.length; i++) {
             let world = this.worldList[i];
-            if (world.isActive && world.isShown) {
-                this.worldList[i].act();
+            if (world.isActive) {
+                world.act();
+            }
+            if (world.isShown) {
+                this.renderWorld(world);
             }
         }
-        this.render();
     }
 }
 
@@ -67,23 +67,20 @@ class World {
     constructor() {
         this.isActive = true;
         this.isShown = true;
+        this.backgroundImage = new Image();
+        this.backgroundImage.src = "images/map2.jpg";
         this.actorList = [];
-        this.area = null;
     }
     addActor(actor) {
+        if (actor.world != null) {
+            actor.world.removeActor(actor);
+        }
         this.actorList.push(actor);
         actor.world = this;
     }
     removeActor(actor) {
         this.actorList.pop(actor);
         actor.world = null;
-    }
-    render() {
-        let ctx = this.area.context;
-        for (let i = 0; i < this.actorList.length; i++) {
-            let actor = this.actorList[i];
-            ctx.drawImage(actor.image, actor.x, actor.y);
-        }
     }
     act() {
         for (let i = 0; i < this.actorList.length; i++) {
@@ -94,8 +91,10 @@ class World {
 
 class Actor {
     constructor(imageSrc = "images/beans0.png") {
-        this.x = 100;
-        this.y = 100;
+        this.isActive = true;
+        this.isShown = true;
+        this.gameX = 100;
+        this.gameY = 100;
         this.xv = 0;
         this.yv = 0;
         this.image = new Image();
@@ -118,24 +117,24 @@ class Actor {
         if (isKeyDown("d") || isKeyDown("ArrowRight")) {
             this.xv += 1;
         }
-        this.x += this.xv;
-        this.y += this.yv;
+        this.gameX += this.xv;
+        this.gameY += this.yv;
         this.yv *= 0.9;
         this.xv *= 0.9;
-        if (this.x < 0) {
-            this.x = 0;
+        if (this.gameX < 0) {
+            this.gameX = 0;
             this.xv *= -1;
         }
-        if (this.y < 0) {
-            this.y = 0;
+        if (this.gameY < 0) {
+            this.gameY = 0;
             this.yv *= -1;
         }
-        if (this.x > this.world.area.canvas.width - this.image.width) {
-            this.x = this.world.area.canvas.width - this.image.width;
+        if (this.gameX > 800 - this.image.width) {
+            this.gameX = 800 - this.image.width;
             this.xv *= -1;
         }
-        if (this.y > this.world.area.canvas.height - this.image.height) {
-            this.y = this.world.area.canvas.height - this.image.height;
+        if (this.gameY > 450 - this.image.height) {
+            this.gameY = 450 - this.image.height;
             this.yv *= -1;
         }
         /**

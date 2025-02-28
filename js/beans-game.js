@@ -1,4 +1,4 @@
-const testGameArea = new GameArea();
+const testGameArea = new Game();
 const testWorld = new World();
 const testActor = new Actor();
 testWorld.addActor(testActor);
