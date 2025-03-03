@@ -75,17 +75,52 @@ class PhysicsActor extends InWorldActor {
             this.xv *= -BOUNCE;
         }
     }
+    collide() {
+        let grounds = this.getTouching(Ground);
+        for (let i = 0; i < grounds.length; i++) {
+            this.collideWith(grounds[i]);
+        }
+    }
+    collideWith(object) {
+        // Thickness of intersection between objects in the up, down, left, and right directions
+        let uInter = (object.y + object.image.height) - this.y;
+        let dInter = (this.y + this.image.height) - object.y;
+        let lInter = (object.x + object.image.height) - this.x;
+        let rInter = (this.x + this.image.height) - object.x;
+
+        if ((uInter < dInter) && (uInter < lInter) && (uInter < rInter)) {
+            this.y = object.y + object.image.height;
+            this.yv = 0;
+        }
+        else if ((dInter < uInter) && (dInter < lInter) && (dInter < rInter)) {
+            this.y = object.y - this.image.height;
+            this.yv = GRAVITY;
+            console.log("surfacing");
+        }
+        else if ((lInter < uInter) && (lInter < dInter) && (lInter < rInter)) {
+            this.x = object.x + object.image.width;
+            this.xv = 0;
+        }
+        else if ((rInter < uInter) && (rInter < dInter) && (rInter < lInter)) {
+            this.x = object.x - this.image.width;
+            this.xv = 0;
+        }
+    }
     act() {
         this.yv += GRAVITY;
-        this.x += this.xv;
-        this.y += this.yv;
         this.bounce();
+        this.collide();
         if (this.isGrounded()) {
             this.yv *= FRICTION;
             this.xv *= FRICTION;
         }
         this.yv *= AIR_RESISTANCE;
         this.xv *= AIR_RESISTANCE;
+        
+        console.log(this.xv);
+        this.x += this.xv;
+        this.y += this.yv;
+
         super.act();
     }
 }
