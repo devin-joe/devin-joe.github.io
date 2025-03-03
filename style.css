@@ -1,5 +1,5 @@
 * {
-    /* outline: 1px solid #000000; */
+    outline: 1px solid #000000;
     font-family: Arial, sans-serif;
 }
 body {
@@ -11,6 +11,7 @@ body {
     background-color: #eef6ff;
     max-width: 100vw;
 }
+/* TODO: improve the semantic mess in the header. */
 header, footer {
     display: flex;
     justify-content: space-between;
@@ -21,8 +22,12 @@ header, footer {
 header *, footer * {
     color: #ffffff;
 }
-header > h1, footer > p {
+header > a, footer p {
     margin: 0px 20px;
+    text-decoration: none;
+}
+header h1 {
+    margin: 0;
 }
 h1, h2 {
     text-align: center;
