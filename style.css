@@ -38,6 +38,8 @@ nav a {
     font-weight: bold;
     text-decoration: none;
     font-size: large;
+    display: flex;
+    align-items: center;
 }
 section {
     margin: 30px auto;
