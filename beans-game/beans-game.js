@@ -1,18 +1,37 @@
-// World constants
 const GRAVITY = 1;
-const DRAG = 0.99;
 const FRICTION = 0.9;
 const BOUNCE = 0.5;
-// Player constants
+const AIR_RESISTANCE = 0.99;
 const JUMP_POWER = 15;
 const SPEED = 1;
-const AIR_SPEED = 0.5;
+const AIR_SPEED = 0.25;
 
 class InWorldActor extends Actor {
     constructor() {
         super();
         this.x = 0;
         this.y = 0;
+    }
+    isTouching(object) {
+        if (this.x + this.image.width < object.x) {return false;}
+        if (this.x > object.x + object.image.width) {return false;}
+        if (this.y + this.image.width < object.y) {return false;}
+        if (this.y > object.y + object.image.width) {return false;}
+        return true;
+    }
+    getTouching(someClass) {
+        let touchingList = [];
+        for (let i = 0; i < this.world.actorList.length; i++) {
+            let object = this.world.actorList[i];
+            if (object instanceof someClass && this.isTouching(object)) {
+                touchingList.push(object);
+            }
+        }
+        return touchingList;
+    }
+    setPosition(x, y) {
+        this.x = x;
+        this.y = y;
     }
     act() {
         this.gameX = this.x;
@@ -30,7 +49,10 @@ class PhysicsActor extends InWorldActor {
         this.yv = 0;
     }
     isGrounded() {
-        // This should NOT have the number 450 or 800 hard coded TODO.
+        // This is a pretty goofy line TODO.
+        if (this.getTouching(Ground).length != 0) {
+            return true;
+        }
         return (this.y >= 450 - this.image.height);
     }
     bounce() {
@@ -61,10 +83,9 @@ class PhysicsActor extends InWorldActor {
         if (this.isGrounded()) {
             this.yv *= FRICTION;
             this.xv *= FRICTION;
-        } else {
-            this.yv *= DRAG;
-            this.xv *= DRAG;
         }
+        this.yv *= AIR_RESISTANCE;
+        this.xv *= AIR_RESISTANCE;
         super.act();
     }
 }
@@ -76,7 +97,7 @@ class Player extends PhysicsActor {
     act() {
         if (this.isGrounded()) {
             if (isInputted("up")) {
-                this.yv -= JUMP_POWER;
+                this.yv = -JUMP_POWER;
             }
             if (isInputted("down")) {
                 this.yv += 0;
@@ -102,5 +123,11 @@ class Player extends PhysicsActor {
             }
         }
         super.act();
+    }
+}
+
+class Ground extends InWorldActor {
+    constructor() {
+        super();
     }
 }
