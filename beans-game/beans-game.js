@@ -15,8 +15,8 @@ class InWorldActor extends Actor {
     isTouching(object) {
         if (this.x + this.image.width < object.x) {return false;}
         if (this.x > object.x + object.image.width) {return false;}
-        if (this.y + this.image.width < object.y) {return false;}
-        if (this.y > object.y + object.image.width) {return false;}
+        if (this.y + this.image.height < object.y) {return false;}
+        if (this.y > object.y + object.image.height) {return false;}
         return true;
     }
     getTouching(someClass) {
@@ -94,8 +94,8 @@ class PhysicsActor extends InWorldActor {
         }
         else if ((dInter < uInter) && (dInter < lInter) && (dInter < rInter)) {
             this.y = object.y - this.image.height;
-            this.yv = GRAVITY;
-            console.log("surfacing");
+            this.yv = 0;
+            console.log(this.getTouching(Ground));
         }
         else if ((lInter < uInter) && (lInter < dInter) && (lInter < rInter)) {
             this.x = object.x + object.image.width;
@@ -107,19 +107,19 @@ class PhysicsActor extends InWorldActor {
         }
     }
     act() {
-        this.yv += GRAVITY;
-        this.bounce();
-        this.collide();
         if (this.isGrounded()) {
             this.yv *= FRICTION;
             this.xv *= FRICTION;
         }
         this.yv *= AIR_RESISTANCE;
         this.xv *= AIR_RESISTANCE;
-        
-        console.log(this.xv);
+        if (!this.isGrounded()) {
+            this.yv += GRAVITY;
+        }
         this.x += this.xv;
         this.y += this.yv;
+        this.bounce();
+        this.collide();
 
         super.act();
     }
