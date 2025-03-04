@@ -1,10 +1,18 @@
 const GRAVITY = 1;
 const FRICTION = 0.9;
 const BOUNCE = 0.5;
-const AIR_RESISTANCE = 0.99;
+const AIR_RESISTANCE = 1;
+// const AIR_RESISTANCE = 0.99;
 const JUMP_POWER = 15;
 const SPEED = 1;
-const AIR_SPEED = 0.25;
+// const AIR_SPEED = 0.25;
+
+/**
+ * At the moment, the name FRICTION is misleading, as it currently
+ * applies to movement in the x direction regardless of contact with the
+ * ground. Renaming may occur once the movement system is solidly in
+ * place.
+ */
 
 class InWorldActor extends Actor {
     constructor() {
@@ -91,30 +99,26 @@ class PhysicsActor extends InWorldActor {
         let lInter = (object.x + object.image.width) - this.x;
         let rInter = (this.x + this.image.width) - object.x;
 
-        if ((uInter < dInter) && (uInter < lInter) && (uInter < rInter)) {
+        if ((uInter < dInter) && (uInter < lInter) && (uInter < rInter) && (this.yv <= 0)) {
             this.y = object.y + object.image.height;
             this.yv = 0;
         }
-        else if ((dInter < uInter) && (dInter < lInter) && (dInter < rInter)) {
+        else if ((dInter < uInter) && (dInter < lInter) && (dInter < rInter) && (this.yv >= 0)) {
             this.y = object.y - this.image.height;
             this.yv = 0;
         }
-        else if ((lInter < uInter) && (lInter < dInter) && (lInter < rInter)) {
+        else if ((lInter < uInter) && (lInter < dInter) && (lInter < rInter) && (this.xv <= 0)) {
             this.x = object.x + object.image.width;
             this.xv = 0;
         }
-        else if ((rInter < uInter) && (rInter < dInter) && (rInter < lInter)) {
+        else if ((rInter < uInter) && (rInter < dInter) && (rInter < lInter) && (this.xv >= 0)) {
             this.x = object.x - this.image.width;
             this.xv = 0;
         }
     }
     act() {
-        if (this.isGrounded()) {
-            this.yv *= FRICTION;
-            this.xv *= FRICTION;
-        }
         this.yv *= AIR_RESISTANCE;
-        this.xv *= AIR_RESISTANCE;
+        this.xv *= FRICTION;
         if (!this.isGrounded()) {
             this.yv += GRAVITY;
         }
@@ -122,7 +126,6 @@ class PhysicsActor extends InWorldActor {
         this.y += this.yv;
         this.bounce();
         this.collide();
-        console.log(this.y);
 
         super.act();
     }
@@ -154,10 +157,10 @@ class Player extends PhysicsActor {
                 this.yv += 0;
             }
             if (isInputted("left")) {
-                this.xv -= AIR_SPEED;
+                this.xv -= SPEED;
             }
             if (isInputted("right")) {
-                this.xv += AIR_SPEED;
+                this.xv += SPEED;
             }
         }
         super.act();
