@@ -49,9 +49,12 @@ class PhysicsActor extends InWorldActor {
         this.yv = 0;
     }
     isGrounded() {
-        // This is a pretty goofy line TODO.
-        if (this.getTouching(Ground).length != 0) {
-            return true;
+        let grounds = this.getTouching(Ground);
+        for (let i = 0; i < grounds.length; i++) {
+            let ground = grounds[i];
+            if (this.y + this.image.height == ground.y && this.yv >= 0) {
+                return true;
+            }
         }
         return (this.y >= 450 - this.image.height);
     }
@@ -85,8 +88,8 @@ class PhysicsActor extends InWorldActor {
         // Thickness of intersection between objects in the up, down, left, and right directions
         let uInter = (object.y + object.image.height) - this.y;
         let dInter = (this.y + this.image.height) - object.y;
-        let lInter = (object.x + object.image.height) - this.x;
-        let rInter = (this.x + this.image.height) - object.x;
+        let lInter = (object.x + object.image.width) - this.x;
+        let rInter = (this.x + this.image.width) - object.x;
 
         if ((uInter < dInter) && (uInter < lInter) && (uInter < rInter)) {
             this.y = object.y + object.image.height;
@@ -95,7 +98,6 @@ class PhysicsActor extends InWorldActor {
         else if ((dInter < uInter) && (dInter < lInter) && (dInter < rInter)) {
             this.y = object.y - this.image.height;
             this.yv = 0;
-            console.log(this.getTouching(Ground));
         }
         else if ((lInter < uInter) && (lInter < dInter) && (lInter < rInter)) {
             this.x = object.x + object.image.width;
@@ -120,6 +122,7 @@ class PhysicsActor extends InWorldActor {
         this.y += this.yv;
         this.bounce();
         this.collide();
+        console.log(this.y);
 
         super.act();
     }
