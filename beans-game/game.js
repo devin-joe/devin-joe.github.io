@@ -9,11 +9,11 @@ class Game {
     }
     addWorld(world) {
         this.worldList.push(world);
-        world.game = this;
+        world.gameArea = this;
     }
     removeWorld(world) {
         this.worldList.pop(world);
-        world.game = null;
+        world.gameArea = null;
         /**
          * It should be noted that removing the worlds without properly
          * deactiving or deleting them or something might amass garbage
@@ -54,6 +54,7 @@ class World {
         this.isShown = true;
         this.backgroundImage = new Image();
         this.backgroundImage.src = "images/map2.jpg";
+        this.gameArea = null;
         this.actorList = [];
     }
     addActor(actor) {
@@ -66,6 +67,16 @@ class World {
     removeActor(actor) {
         this.actorList.pop(actor);
         actor.world = null;
+    }
+    getActors(someClass) {
+        let actors = [];
+        for (let i = 0; i < this.actorList.length; i++) {
+            let actor = this.actorList[i];
+            if (actor instanceof someClass) {
+                actors.push(actor);
+            }
+        }
+        return actors;
     }
     act() {
         for (let i = 0; i < this.actorList.length; i++) {

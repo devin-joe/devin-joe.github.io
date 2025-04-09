@@ -1,24 +1,18 @@
 const GRAVITY = 1;
-const FRICTION = 0.9;
+const XV_DAMPING = 0.9;
 const BOUNCE = 0.5;
 const AIR_RESISTANCE = 1;
-// const AIR_RESISTANCE = 0.99;
 const JUMP_POWER = 15;
 const SPEED = 1;
-// const AIR_SPEED = 0.25;
 
 /**
- * At the moment, the name FRICTION is misleading, as it currently
- * applies to movement in the x direction regardless of contact with the
- * ground. Renaming may occur once the movement system is solidly in
- * place.
+ * An actor with a position in a custom reference frame.
  */
-
-class InWorldActor extends Actor {
-    constructor() {
-        super();
-        this.x = 0;
-        this.y = 0;
+class PositionActor extends Actor {
+    constructor(imageSrc = "images/beans0.png", x = 0, y = 0) {
+        super(imageSrc);
+        this.x = x;
+        this.y = y;
     }
     isTouching(object) {
         if (this.x + this.image.width < object.x) {return false;}
@@ -29,9 +23,10 @@ class InWorldActor extends Actor {
     }
     getTouching(someClass) {
         let touchingList = [];
-        for (let i = 0; i < this.world.actorList.length; i++) {
-            let object = this.world.actorList[i];
-            if (object instanceof someClass && this.isTouching(object)) {
+        let objectList = this.world.getActors(someClass);
+        for (let i = 0; i < objectList.length; i++) {
+            let object = objectList[i];
+            if (this.isTouching(object)) {
                 touchingList.push(object);
             }
         }
@@ -42,17 +37,13 @@ class InWorldActor extends Actor {
         this.y = y;
     }
     act() {
-        this.gameX = this.x;
-        this.gameY = this.y;
-        super.act()
+        super.act();
     }
 }
 
-class PhysicsActor extends InWorldActor {
-    constructor(imageSrc = "images/beans0.png") {
-        super(imageSrc);
-        this.x = 0;
-        this.y = 0;
+class PhysicsActor extends PositionActor {
+    constructor(imageSrc = "images/beans0.png", x = 0, y = 0) {
+        super(imageSrc, x, y);
         this.xv = 0;
         this.yv = 0;
     }
@@ -118,7 +109,7 @@ class PhysicsActor extends InWorldActor {
     }
     act() {
         this.yv *= AIR_RESISTANCE;
-        this.xv *= FRICTION;
+        this.xv *= XV_DAMPING;
         if (!this.isGrounded()) {
             this.yv += GRAVITY;
         }
@@ -132,8 +123,8 @@ class PhysicsActor extends InWorldActor {
 }
 
 class Player extends PhysicsActor {
-    constructor() {
-        super();
+    constructor(imageSrc = "images/beans0.png", x = 0, y = 0) {
+        super(imageSrc, x, y);
     }
     act() {
         if (this.isGrounded()) {
@@ -167,8 +158,32 @@ class Player extends PhysicsActor {
     }
 }
 
-class Ground extends InWorldActor {
-    constructor() {
-        super();
+class Ground extends PositionActor {
+    constructor(imageSrc = "images/beans0.png", x = 0, y = 0) {
+        super(imageSrc, x, y);
+    }
+}
+
+class Camera extends PositionActor {
+    constructor(x, y) {
+        super("images/beans0.png", x, y);
+        this.isShown = false;
+    }
+
+    act() {
+        let positionActors = this.world.getActors(PositionActor);
+        
+        // Test:
+        let followed = this.world.getActors(Player)[0];
+        this.x = followed.x + followed.image.width/2;
+        this.y = followed.y + followed.image.height/2;
+
+        for (let i = 0; i < positionActors.length; i++) {
+            let actor = positionActors[i];
+            // Egregious TODO:
+            actor.gameX = actor.x - this.x + this.world.gameArea.canvas.width/2;
+            actor.gameY = actor.y - this.y + this.world.gameArea.canvas.height/2;
+        }
+        super.act();
     }
 }

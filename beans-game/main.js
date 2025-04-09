@@ -1,19 +1,15 @@
 const testGameArea = new Game();
 const testWorld = new World();
-const testActor = new Player();
-const testGround = new Ground();
-const testGround2 = new Ground();
-const testGround3 = new Ground();
-const testGround4 = new Ground();
-testWorld.addActor(testActor);
-testWorld.addActor(testGround);
-testWorld.addActor(testGround2);
-testWorld.addActor(testGround3);
-testWorld.addActor(testGround4);
-testGround.setPosition(300, 380);
-testGround2.setPosition(300, 320);
-testGround3.setPosition(200, 370);
-testGround4.setPosition(400, 370);
+const player = new Player(undefined, 400, 225);
+testWorld.addActor(player);
+testWorld.addActor(new Ground("images/beans0.png", 300, 300));
+testWorld.addActor(new Ground("images/beans0.png", 300, 360));
+testWorld.addActor(new Ground("images/beans0.png", 200, 350));
+testWorld.addActor(new Ground("images/beans0.png", 400, 360));
+testWorld.addActor(new Ground("images/beans0.png", 300, 240));
+testWorld.addActor(new Ground("images/tile1_wide.png", 165, 400));
+testWorld.addActor(new Camera(400, 225));
+
 testGameArea.addWorld(testWorld);
 
 function act() {
