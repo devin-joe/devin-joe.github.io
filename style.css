@@ -51,11 +51,14 @@ h1, h2 {
     text-align: center;
 }
 p a {
-    color: #094187;
+    color: #195197;
     text-decoration: none;
 }
 p a:hover {
     text-decoration: underline;
+}
+p a:active {
+    color: #975119;
 }
 nav {
     display: flex;
