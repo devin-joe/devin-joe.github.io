@@ -197,7 +197,7 @@ footer {
     flex-direction: column;
     justify-content: center;
 }
-.jeremy > input {
-    width: 100px;
+.jeremy-function {
+    text-align: center;
 }
 /* End of Jeremy */
