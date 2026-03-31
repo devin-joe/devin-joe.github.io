@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devin Joe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="/"><h1>Devin Joe</h1></a>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#about">About Me</a>
+            <a href="#projects">Goofy Projects</a>
+            <a href="#jokes">Jokes</a>
+        </nav>
+    </header>
+
+    <div class="content">
+        <section id="jeremy">
+            <h2>Jeremy</h2>
+
+            <div class="jeremy">
+                <input type="text" id="inputWord" placeholder="Enter text" oninput="reverseWord()" />
+                <p id="output"></p>
+
+                <script>
+                    function reverseWord() {
+                        const input = document.getElementById("inputWord").value.toLowerCase();
+                        
+                        let sum = 0;
+                        
+                        for (let i = 0; i < input.length; i++) {
+                            const code = input.charCodeAt(i);
+                            // a = 97, b = 98, ..., z = 122
+                            if (code >= 97 && code <= 122) {
+                                sum += (code - 96);
+                            }
+                        }
+                        
+                        const sqrt = Math.sqrt(sum);
+                        const isSquare = Number.isInteger(sqrt);
+                        
+                        document.getElementById("output").textContent = isSquare ? "True" : "False";
+                    }
+                </script>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Devin Joe. All rights reserved.</p>
+    </footer>
+</body>
+</html>

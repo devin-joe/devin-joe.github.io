@@ -191,3 +191,13 @@ footer {
 .joke {
     margin: 20px;
 }
+/* Jeremy */
+.jeremy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.jeremy > input {
+    width: 100px;
+}
+/* End of Jeremy */
