@@ -158,7 +158,7 @@ footer {
 .project-row {
     display: flex;
     justify-content: left;
-    align-items: baseline;
+    align-items: top;
     gap: 25px;
     flex-wrap: wrap;
 }
