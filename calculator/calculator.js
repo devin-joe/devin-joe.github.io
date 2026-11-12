@@ -5,7 +5,7 @@ function getResult() {
 }
 
 function evaluate(string) {
-    return tokenize(string)
+    return tokenize(string).join(", ")
     // return evaluateParsed(parse(tokenize(string)))
 }
 
@@ -35,15 +35,16 @@ function tokenize(string) {
             index++;
         }
     }
-    return tokens.join(", ")
-    // return tokens
+    // return tokens.join(", ")
+    return tokens
 }
 
 function parse(tokens) {
     function parse_from(index) {
         token = tokens[index];
         if (token == "(") {
-            let 
+            let parenthesized_expr = [];
+            // idk lol continue
         }
         return tokens
     }
