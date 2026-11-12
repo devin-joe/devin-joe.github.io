@@ -5,6 +5,12 @@ const AIR_RESISTANCE = 1;
 const JUMP_POWER = 15;
 const SPEED = 1;
 
+const LEVEL_WIDTH = 800;
+const LEVEL_HEIGHT = 450;
+
+const CAMERA_X_ANTICIPATION = 30;
+const CAMERA_Y_ANTICIPATION = 5;
+
 /**
  * An actor with a position in a custom reference frame.
  */
@@ -41,11 +47,22 @@ class PositionActor extends Actor {
     }
 }
 
-class PhysicsActor extends PositionActor {
+class MotionActor extends PositionActor {
     constructor(imageSrc = "images/beans0.png", x = 0, y = 0) {
         super(imageSrc, x, y);
         this.xv = 0;
         this.yv = 0;
+    }
+
+    act() {
+        this.x += this.xv;
+        this.y += this.yv;
+    }
+}
+
+class PhysicsActor extends MotionActor {
+    constructor(imageSrc = "images/beans0.png", x = 0, y = 0) {
+        super(imageSrc, x, y);
     }
     isGrounded() {
         let grounds = this.getTouching(Ground);
@@ -62,18 +79,16 @@ class PhysicsActor extends PositionActor {
             //     this.y = 0;
             //     this.yv *= -1;
             // }
-        // This should NOT have the number 450 or 800 hard coded TODO.
-        if (this.y > 450 - this.image.height) {
-            this.y = 450 - this.image.height;
+        if (this.y > LEVEL_HEIGHT - this.image.height) {
+            this.y = LEVEL_HEIGHT - this.image.height;
             this.yv = 0;
         }
         if (this.x < 0) {
             this.x = 0;
             this.xv *= -BOUNCE;
         }
-        // This should NOT have the number 450 or 800 hard coded TODO.
-        if (this.x > 800 - this.image.width) {
-            this.x = 800 - this.image.width;
+        if (this.x > LEVEL_WIDTH - this.image.width) {
+            this.x = LEVEL_WIDTH - this.image.width;
             this.xv *= -BOUNCE;
         }
     }
@@ -113,12 +128,11 @@ class PhysicsActor extends PositionActor {
         if (!this.isGrounded()) {
             this.yv += GRAVITY;
         }
-        this.x += this.xv;
-        this.y += this.yv;
-        this.bounce();
-        this.collide();
 
         super.act();
+
+        this.bounce();
+        this.collide();
     }
 }
 
@@ -164,19 +178,29 @@ class Ground extends PositionActor {
     }
 }
 
-class Camera extends PositionActor {
+class Camera extends MotionActor {
     constructor(x, y) {
         super("images/beans0.png", x, y);
         this.isShown = false;
     }
 
-    act() {
-        let positionActors = this.world.getActors(PositionActor);
-        
-        // Test:
+    updateVelocity() {
         let followed = this.world.getActors(Player)[0];
-        this.x = followed.x + followed.image.width/2;
-        this.y = followed.y + followed.image.height/2;
+        let targetX = followed.x + followed.image.width/2;
+        let targetY = followed.y + followed.image.height/2;
+        
+        targetX += followed.xv * CAMERA_X_ANTICIPATION;
+        targetY += followed.yv * CAMERA_Y_ANTICIPATION;
+        
+        targetX = targetX * 0.8 + LEVEL_WIDTH * 0.1;
+        targetY = targetY * 0.3 + LEVEL_HEIGHT * 0.4;
+
+        this.xv = (targetX - this.x) * 0.03;
+        this.yv = (targetY - this.y) * 0.03;
+    }
+
+    updateActorPositions() {
+        let positionActors = this.world.getActors(PositionActor);
 
         for (let i = 0; i < positionActors.length; i++) {
             let actor = positionActors[i];
@@ -184,6 +208,12 @@ class Camera extends PositionActor {
             actor.gameX = actor.x - this.x + this.world.gameArea.canvas.width/2;
             actor.gameY = actor.y - this.y + this.world.gameArea.canvas.height/2;
         }
+    }
+    
+    act() {
+        this.updateVelocity();
+        this.updateActorPositions();
         super.act();
     }
+    
 }
